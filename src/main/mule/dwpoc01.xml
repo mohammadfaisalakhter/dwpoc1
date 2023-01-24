@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="fbdd798d-1528-406e-b464-f85de189e5f2" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="dwpoc1Flow" doc:id="cdc20866-f4ac-4b92-8163-2674d5a4f83a" >
+		<http:listener doc:name="Listener" doc:id="7170f41a-d3fd-4877-8019-ac0bd819a6be" config-ref="HTTP_Listener_config" path="/dwpoc1"/>
+		<ee:transform doc:name="Transform Message" doc:id="43ac71c2-814f-404d-87e8-ecbeb9245d54" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+var dwpoc1_array = [1,2,3,4]
+output application/json
+---
+//POC-1 DW Function
+{
+	"Minimum Value [1,2,3,4] " : min(dwpoc1_array),
+	"Maximum Value [1,2,3,4] " : max(dwpoc1_array)
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
